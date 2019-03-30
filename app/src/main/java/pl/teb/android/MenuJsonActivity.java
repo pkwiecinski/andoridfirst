@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,6 +16,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 public class MenuJsonActivity extends AppCompatActivity {
 
@@ -32,6 +35,8 @@ public class MenuJsonActivity extends AppCompatActivity {
         showSimpleProgressDialog(context, "Loading...", "Fetching Json", false);
 
         final TextView textView = (TextView) findViewById(R.id.text1);
+        final ListView listView = (ListView) findViewById(R.id.menu1);
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://192.168.1.192:5544";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -41,6 +46,11 @@ public class MenuJsonActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         removeSimpleProgressDialog();
+
+                      ArrayList<MenuModel> menuModelArrayList = getInfo(response);
+                        MenuAdapter menuAdapter = new MenuAdapter(context, menuModelArrayList);
+                        listView.setAdapter(menuAdapter);
+
                         Log.v(TAG, "OnResponse");
                         textView.setText("Response is: " + response.toString().substring(0, 500));
 
@@ -96,6 +106,11 @@ public class MenuJsonActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+        }
+
+        protected ArrayList<MenuModel> getInfo (JSONArray response){
+        ArrayList<MenuModel> listamenu = new ArrayList<MenuModel>();
+        return listamenu;
         }
 
     }
